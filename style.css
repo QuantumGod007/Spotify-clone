@@ -1,0 +1,636 @@
+/* ==========================================================================
+   Spotify Web Player - Modern Single Page Web Application Stylesheet
+   Crafted with custom CSS3 & Bootstrap 5.3 integration
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Root Variables & Typography
+   -------------------------------------------------------------------------- */
+:root {
+  --sp-black: #000000;
+  --sp-dark-base: #121212;
+  --sp-card-bg: #181818;
+  --sp-card-hover: #282828;
+  --sp-elevated-base: #242424;
+  --sp-subtle: #3e3e3e;
+  --sp-green: #1db954;
+  --sp-green-hover: #1ed760;
+  --sp-green-light: #2ee86f;
+  --sp-text-main: #ffffff;
+  --sp-text-sub: #b3b3b3;
+  --sp-text-muted: #727272;
+  --sp-border: rgba(255, 255, 255, 0.08);
+  --sp-glass: rgba(18, 18, 18, 0.85);
+  --sidebar-width: 260px;
+  --player-height: 90px;
+  --transition-smooth: all 0.25s cubic-bezier(0.3, 0, 0, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--sp-black);
+  color: var(--sp-text-main);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6, .brand-text {
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* --------------------------------------------------------------------------
+   2. Layout Architecture
+   -------------------------------------------------------------------------- */
+.app-layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  padding-bottom: var(--player-height);
+  background-color: var(--sp-black);
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  height: 100%;
+  background-color: var(--sp-black);
+  border-right: 1px solid var(--sp-border);
+  z-index: 100;
+}
+
+.spotify-brand-icon {
+  font-size: 2.2rem;
+  color: var(--sp-green);
+  filter: drop-shadow(0 0 10px rgba(29, 185, 84, 0.35));
+}
+
+.brand-text {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+
+.sidebar-nav .nav-link {
+  color: var(--sp-text-sub);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 10px 14px;
+  border-radius: 8px;
+  transition: var(--transition-smooth);
+}
+
+.sidebar-nav .nav-link:hover {
+  color: var(--sp-text-main);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-nav .nav-link.active {
+  color: var(--sp-text-main);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-divider {
+  border-color: var(--sp-border);
+  opacity: 1;
+}
+
+.btn-dark-glass {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--sp-text-sub);
+  border-radius: 10px;
+  padding: 8px 12px;
+  transition: var(--transition-smooth);
+}
+
+.btn-dark-glass:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.action-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.bg-gradient-heart {
+  background: linear-gradient(135deg, #450af5, #c4efd9);
+}
+
+.sidebar-playlist-link {
+  display: block;
+  padding: 6px 10px;
+  color: var(--sp-text-sub);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: var(--transition-smooth);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-playlist-link:hover {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-playlist-link.active-playlist {
+  color: var(--sp-green);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   3. Main Content Container & Top Header
+   -------------------------------------------------------------------------- */
+.main-wrapper {
+  flex-grow: 1;
+  height: 100%;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #1f1f1f 0%, #121212 280px, #121212 100%);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  scroll-behavior: smooth;
+}
+
+.top-header {
+  background-color: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--sp-border);
+  z-index: 90;
+}
+
+.search-input-group {
+  max-width: 460px;
+  border-radius: 50px;
+  overflow: hidden;
+  background-color: #242424;
+  border: 1px solid transparent;
+  transition: var(--transition-smooth);
+}
+
+.search-input-group:focus-within {
+  border-color: #fff;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+
+.search-input-group input {
+  font-size: 0.88rem;
+  background-color: transparent !important;
+}
+
+.search-input-group input::placeholder {
+  color: var(--sp-text-sub);
+}
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: var(--transition-smooth);
+}
+
+.btn-icon:hover {
+  transform: scale(1.06);
+}
+
+.profile-avatar {
+  width: 28px;
+  height: 28px;
+  object-fit: cover;
+}
+
+.btn-user-profile {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: var(--transition-smooth);
+}
+
+.btn-user-profile:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.glass-dropdown {
+  background: rgba(24, 24, 24, 0.95) !important;
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--sp-border);
+  border-radius: 12px;
+}
+
+.category-pills-bar .nav-link {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-weight: 500;
+  transition: var(--transition-smooth);
+  border: 1px solid transparent;
+}
+
+.category-pills-bar .nav-link:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.category-pills-bar .nav-link.active {
+  background: #fff;
+  color: #000;
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   4. Hero Banner Carousel
+   -------------------------------------------------------------------------- */
+.hero-slide-content {
+  min-height: 340px;
+  border-radius: 1rem;
+}
+
+@media (min-width: 992px) {
+  .hero-slide-content {
+    min-height: 400px;
+  }
+}
+
+.carousel-indicators [data-bs-target] {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin: 0 4px;
+}
+
+/* --------------------------------------------------------------------------
+   5. Quick Mix & Song Cards (Bootstrap Grid Customization)
+   -------------------------------------------------------------------------- */
+.quick-card {
+  background-color: rgba(255, 255, 255, 0.07);
+  transition: var(--transition-smooth);
+  cursor: pointer;
+  height: 64px;
+  position: relative;
+}
+
+.quick-card:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.quick-card-img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+}
+
+.quick-card-title {
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.btn-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: var(--transition-smooth);
+}
+
+.quick-play-btn {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: var(--transition-smooth);
+}
+
+.quick-card:hover .quick-play-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Song Card Design */
+.song-card {
+  background-color: var(--sp-card-bg);
+  transition: var(--transition-smooth);
+  cursor: pointer;
+  border: 1px solid transparent;
+  position: relative;
+}
+
+.song-card:hover {
+  background-color: var(--sp-card-hover);
+  border-color: rgba(255, 255, 255, 0.05);
+  transform: translateY(-4px);
+}
+
+.song-img-wrapper {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.song-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.song-card:hover .song-card-img {
+  transform: scale(1.04);
+}
+
+.song-card-play-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: var(--transition-smooth);
+  background-color: var(--sp-green);
+  color: #000;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+}
+
+.song-card:hover .song-card-play-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.song-card-play-btn:hover {
+  background-color: var(--sp-green-hover);
+  transform: scale(1.08) !important;
+}
+
+/* Artist Card */
+.artist-card {
+  background-color: var(--sp-card-bg);
+  transition: var(--transition-smooth);
+  cursor: pointer;
+}
+
+.artist-card:hover {
+  background-color: var(--sp-card-hover);
+  transform: translateY(-4px);
+}
+
+.artist-img-wrapper {
+  width: 120px;
+  height: 120px;
+}
+
+.artist-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.artist-play-btn {
+  bottom: 0;
+  right: 0;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: var(--transition-smooth);
+}
+
+.artist-card:hover .artist-play-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   6. Pricing & FAQ Section
+   -------------------------------------------------------------------------- */
+.pricing-card {
+  transition: var(--transition-smooth);
+  background-color: #1a1a1a;
+}
+
+.pricing-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.5);
+}
+
+.featured-plan {
+  background: linear-gradient(180deg, #203525 0%, #161f18 100%);
+}
+
+.custom-accordion .accordion-item {
+  background-color: #1a1a1a;
+  border-radius: 12px !important;
+  margin-bottom: 12px;
+  border: 1px solid var(--sp-border);
+}
+
+.custom-accordion .accordion-button:not(.collapsed) {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--sp-green);
+}
+
+.custom-accordion .accordion-button:focus {
+  box-shadow: none;
+}
+
+/* --------------------------------------------------------------------------
+   7. Visualizer & Lyrics
+   -------------------------------------------------------------------------- */
+.lyrics-line {
+  color: var(--sp-text-sub);
+  font-size: 0.95rem;
+  transition: var(--transition-smooth);
+}
+
+.lyrics-line.active-line {
+  color: var(--sp-green);
+  font-weight: 700;
+  font-size: 1.05rem;
+  transform: scale(1.02);
+}
+
+/* --------------------------------------------------------------------------
+   8. Footer Styles
+   -------------------------------------------------------------------------- */
+.spotify-footer {
+  background-color: #101010;
+  border-top: 1px solid var(--sp-border);
+}
+
+.footer-links a {
+  color: var(--sp-text-sub);
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+
+.footer-links a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.social-icon-btn {
+  width: 40px;
+  height: 40px;
+  background-color: #242424;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+
+.social-icon-btn:hover {
+  background-color: var(--sp-green);
+  color: #000;
+  transform: translateY(-3px);
+}
+
+/* --------------------------------------------------------------------------
+   9. Fixed Bottom Audio Player
+   -------------------------------------------------------------------------- */
+.fixed-bottom-player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--player-height);
+  background-color: rgba(18, 18, 18, 0.97);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  z-index: 1050;
+}
+
+.now-playing-thumb {
+  width: 56px;
+  height: 56px;
+}
+
+.now-playing-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.play-main-btn {
+  width: 38px;
+  height: 38px;
+  font-size: 0.9rem;
+}
+
+.play-main-btn:hover {
+  transform: scale(1.08);
+}
+
+/* Custom Progress Bar */
+.custom-progress {
+  height: 4px;
+  width: 100%;
+  cursor: pointer;
+  position: relative;
+  transition: height 0.15s ease;
+}
+
+.progress-bar-container:hover .custom-progress {
+  height: 6px;
+}
+
+.progress-bar-container:hover .custom-progress-filled {
+  background-color: var(--sp-green) !important;
+}
+
+.custom-progress-filled {
+  height: 100%;
+  transition: width 0.1s linear;
+}
+
+.volume-slider-wrapper {
+  width: 90px;
+}
+
+.custom-range {
+  height: 4px;
+  cursor: pointer;
+}
+
+.custom-range::-webkit-slider-thumb {
+  background: #fff;
+}
+
+/* --------------------------------------------------------------------------
+   10. Helper Utilities & Animations
+   -------------------------------------------------------------------------- */
+.fs-7 { font-size: 0.85rem; }
+.fs-8 { font-size: 0.75rem; }
+
+.hover-text-white:hover { color: #fff !important; }
+.hover-scale { transition: var(--transition-smooth); }
+.hover-scale:hover { transform: scale(1.04); }
+.hover-underline:hover { text-decoration: underline; }
+.cursor-pointer { cursor: pointer; }
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.custom-scrollbar-x::-webkit-scrollbar {
+  height: 4px;
+}
+.custom-scrollbar-x::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.heart-btn.liked i {
+  color: var(--sp-green) !important;
+  font-weight: 900 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+  .app-layout {
+    padding-bottom: 95px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .fixed-bottom-player {
+    height: 85px;
+  }
+  .now-playing-thumb {
+    width: 44px;
+    height: 44px;
+  }
+  .artist-img-wrapper {
+    width: 90px;
+    height: 90px;
+  }
+}

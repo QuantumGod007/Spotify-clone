@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Spotify Web Player - Modern, responsive single-page music streaming web application built with HTML5, CSS3, and Bootstrap 5.">
+  <meta name="keywords" content="Spotify, Web Player, Music Streaming, HTML5, CSS3, Bootstrap 5, Single Page Application">
+  <meta name="author" content="Nupoor Deshpande">
+  <title>Spotify - Web Player: Music for everyone</title>
+
+  <!-- Google Fonts: Inter & Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6 & Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Bootstrap 5.3.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <!-- App Wrapper -->
+  <div class="app-layout">
+
+    <!-- ==============================================
+         1. SIDEBAR NAVIGATION (Desktop & Offcanvas for Mobile)
+         ============================================== -->
+    <!-- Desktop Sidebar -->
+    <aside class="sidebar d-none d-lg-flex flex-column" id="desktopSidebar">
+      <!-- Spotify Brand Logo -->
+      <div class="sidebar-logo px-4 pt-4 pb-3">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none gap-2">
+          <i class="fa-brands fa-spotify spotify-brand-icon"></i>
+          <span class="brand-text">Spotify<span class="text-success fs-6 ms-1">®</span></span>
+        </a>
+      </div>
+
+      <!-- Main Navigation Links -->
+      <nav class="sidebar-nav px-3">
+        <ul class="nav flex-column gap-1">
+          <li class="nav-item">
+            <a href="#home" class="nav-link active d-flex align-items-center gap-3" id="navHome">
+              <i class="fa-solid fa-house fa-lg"></i>
+              <span>Home</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#searchSection" class="nav-link d-flex align-items-center gap-3" id="navSearch">
+              <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+              <span>Search & Browse</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#librarySection" class="nav-link d-flex align-items-center gap-3" id="navLibrary">
+              <i class="fa-solid fa-lines-leaning fa-lg"></i>
+              <span>Your Library</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <hr class="sidebar-divider mx-3 my-3">
+
+      <!-- Action Buttons (Create Playlist, Liked Songs) -->
+      <div class="sidebar-actions px-3">
+        <button class="btn btn-dark-glass w-100 d-flex align-items-center gap-3 mb-2 text-start" data-bs-toggle="modal" data-bs-target="#createPlaylistModal">
+          <span class="action-icon bg-white text-dark"><i class="fa-solid fa-plus"></i></span>
+          <span class="fw-semibold">Create Playlist</span>
+        </button>
+        <button class="btn btn-dark-glass w-100 d-flex align-items-center gap-3 mb-2 text-start" id="sidebarLikedBtn">
+          <span class="action-icon bg-gradient-heart text-white"><i class="fa-solid fa-heart"></i></span>
+          <span class="fw-semibold">Liked Songs</span>
+          <span class="badge bg-success ms-auto rounded-pill" id="likedBadgeCount">6</span>
+        </button>
+        <button class="btn btn-dark-glass w-100 d-flex align-items-center gap-3 text-start" data-bs-toggle="modal" data-bs-target="#premiumModal">
+          <span class="action-icon bg-warning text-dark"><i class="fa-solid fa-crown"></i></span>
+          <span class="fw-semibold">Explore Premium</span>
+        </button>
+      </div>
+
+      <!-- Playlist / Library Quick List -->
+      <div class="sidebar-playlists flex-grow-1 px-3 mt-3 overflow-y-auto custom-scrollbar">
+        <h6 class="text-uppercase text-secondary fs-7 fw-bold px-2 mb-2 tracking-wider">Playlists</h6>
+        <ul class="list-unstyled d-flex flex-column gap-1" id="sidebarPlaylistList">
+          <li><a href="#" class="sidebar-playlist-link active-playlist" data-filter="all">Today's Top Hits</a></li>
+          <li><a href="#" class="sidebar-playlist-link" data-filter="lofi">Chill Lo-Fi Beats</a></li>
+          <li><a href="#" class="sidebar-playlist-link" data-filter="pop">Global Pop 2026</a></li>
+          <li><a href="#" class="sidebar-playlist-link" data-filter="rock">Rock Classics & Anthems</a></li>
+          <li><a href="#" class="sidebar-playlist-link" data-filter="hiphop">Hip Hop Central</a></li>
+          <li><a href="#" class="sidebar-playlist-link" data-filter="podcast">Tech & Science Podcasts</a></li>
+        </ul>
+      </div>
+
+      <!-- Install App Banner in Sidebar -->
+      <div class="sidebar-footer p-3">
+        <button class="btn btn-outline-light btn-sm w-100 rounded-pill d-flex align-items-center justify-content-center gap-2" id="installAppBtn">
+          <i class="fa-regular fa-circle-down"></i>
+          <span>Install Web App</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Offcanvas Mobile Sidebar (Bootstrap Offcanvas Component) -->
+    <div class="offcanvas offcanvas-start bg-black text-white" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
+      <div class="offcanvas-header border-bottom border-secondary border-opacity-25">
+        <div class="d-flex align-items-center gap-2">
+          <i class="fa-brands fa-spotify spotify-brand-icon fs-2"></i>
+          <h5 class="offcanvas-title fw-bold m-0" id="mobileSidebarLabel">Spotify</h5>
+        </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body d-flex flex-column">
+        <ul class="nav flex-column gap-2 mb-4">
+          <li class="nav-item">
+            <a href="#home" class="nav-link active d-flex align-items-center gap-3" data-bs-dismiss="offcanvas">
+              <i class="fa-solid fa-house"></i> <span>Home</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#searchSection" class="nav-link d-flex align-items-center gap-3" data-bs-dismiss="offcanvas">
+              <i class="fa-solid fa-magnifying-glass"></i> <span>Search & Discover</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#featuredSection" class="nav-link d-flex align-items-center gap-3" data-bs-dismiss="offcanvas">
+              <i class="fa-solid fa-fire"></i> <span>Trending Charts</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#plansSection" class="nav-link d-flex align-items-center gap-3" data-bs-dismiss="offcanvas">
+              <i class="fa-solid fa-gem"></i> <span>Premium Plans</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#faqSection" class="nav-link d-flex align-items-center gap-3" data-bs-dismiss="offcanvas">
+              <i class="fa-solid fa-circle-question"></i> <span>Help & FAQs</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="d-grid gap-2 mb-4">
+          <button class="btn btn-success rounded-pill fw-bold" data-bs-toggle="modal" data-bs-target="#createPlaylistModal" data-bs-dismiss="offcanvas">
+            <i class="fa-solid fa-plus me-2"></i> Create Playlist
+          </button>
+          <button class="btn btn-outline-warning rounded-pill fw-bold" data-bs-toggle="modal" data-bs-target="#premiumModal" data-bs-dismiss="offcanvas">
+            <i class="fa-solid fa-crown me-2"></i> Upgrade Premium
+          </button>
+        </div>
+
+        <div class="mt-auto pt-3 border-top border-secondary border-opacity-25">
+          <small class="text-secondary d-block text-center">Spotify Clone Single Page App</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==============================================
+         2. MAIN CONTENT AREA
+         ============================================== -->
+    <div class="main-wrapper" id="mainContainer">
+
+      <!-- Top Header & Navigation Bar (Bootstrap Navbar Component) -->
+      <header class="top-header sticky-top">
+        <nav class="navbar navbar-expand-lg px-3 px-md-4 py-2">
+          <div class="container-fluid p-0 gap-2 gap-md-3">
+            
+            <!-- Mobile Toggle Button (Offcanvas) -->
+            <button class="btn btn-icon d-lg-none text-white border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-label="Toggle navigation">
+              <i class="fa-solid fa-bars fs-5"></i>
+            </button>
+
+            <!-- Navigation History Controls (Desktop) -->
+            <div class="d-none d-md-flex gap-2">
+              <button class="btn btn-icon rounded-circle bg-dark-glass text-white" id="navBackBtn" title="Go Back">
+                <i class="fa-solid fa-chevron-left"></i>
+              </button>
+              <button class="btn btn-icon rounded-circle bg-dark-glass text-white" id="navForwardBtn" title="Go Forward">
+                <i class="fa-solid fa-chevron-right"></i>
+              </button>
+            </div>
+
+            <!-- Live Search Bar -->
+            <div class="search-container flex-grow-1 mx-1 mx-md-3" id="searchSection">
+              <div class="input-group search-input-group">
+                <span class="input-group-text bg-dark-subtle border-0 text-secondary ps-3">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <input type="text" class="form-control bg-dark-subtle border-0 text-white shadow-none ps-2 pe-3" id="globalSearchInput" placeholder="What do you want to play? (Songs, artists, genres...)" aria-label="Search">
+                <button class="btn bg-dark-subtle border-0 text-secondary d-none" id="clearSearchBtn" type="button">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right Header Actions -->
+            <div class="d-flex align-items-center gap-2 gap-md-3">
+              <!-- Premium Pill CTA -->
+              <button class="btn btn-sm btn-light rounded-pill fw-bold px-3 d-none d-sm-inline-block hover-scale" data-bs-toggle="modal" data-bs-target="#premiumModal">
+                Explore Premium
+              </button>
+
+              <!-- Notifications Dropdown -->
+              <div class="dropdown">
+                <button class="btn btn-icon rounded-circle bg-dark-glass text-white position-relative" data-bs-toggle="dropdown" aria-expanded="false" title="Notifications">
+                  <i class="fa-regular fa-bell"></i>
+                  <span class="position-absolute top-0 start-100 translate-middle p-1 bg-success border border-dark rounded-circle">
+                    <span class="visually-hidden">New alerts</span>
+                  </span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark p-2 shadow-lg glass-dropdown">
+                  <li class="dropdown-header text-uppercase fs-8 text-secondary fw-bold">Notifications</li>
+                  <li>
+                    <a class="dropdown-item rounded-2 py-2 d-flex align-items-center gap-2" href="#">
+                      <i class="fa-solid fa-compact-disc text-success"></i>
+                      <div>
+                        <div class="fw-semibold fs-7">New Release from The Weeknd</div>
+                        <small class="text-secondary">Just now</small>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item rounded-2 py-2 d-flex align-items-center gap-2" href="#">
+                      <i class="fa-solid fa-heart text-danger"></i>
+                      <div>
+                        <div class="fw-semibold fs-7">3 new songs in Liked Songs</div>
+                        <small class="text-secondary">2 hours ago</small>
+                      </div>
+                    </a>
+                  </li>
+                  <li><hr class="dropdown-divider border-secondary opacity-25"></li>
+                  <li><a class="dropdown-item text-center text-success fs-7 fw-bold" href="#">Mark all as read</a></li>
+                </ul>
+              </div>
+
+              <!-- User Profile Dropdown (Bootstrap Dropdown Component) -->
+              <div class="dropdown">
+                <button class="btn btn-user-profile rounded-pill d-flex align-items-center gap-2 p-1 pe-2 bg-dark-glass text-white border-0" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Avatar" class="profile-avatar rounded-circle">
+                  <span class="d-none d-md-inline fw-semibold fs-7" id="userNameLabel">music_mate</span>
+                  <i class="fa-solid fa-chevron-down fs-8 ms-1"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark p-2 shadow-lg glass-dropdown">
+                  <li><a class="dropdown-item rounded-2" href="#" data-bs-toggle="modal" data-bs-target="#userProfileModal"><i class="fa-regular fa-user me-2"></i> Profile & Settings</a></li>
+                  <li><a class="dropdown-item rounded-2" href="#" data-bs-toggle="modal" data-bs-target="#premiumModal"><i class="fa-solid fa-gem me-2 text-warning"></i> Upgrade Account</a></li>
+                  <li><a class="dropdown-item rounded-2" href="#faqSection"><i class="fa-regular fa-circle-question me-2"></i> Support</a></li>
+                  <li><hr class="dropdown-divider border-secondary opacity-25"></li>
+                  <li><a class="dropdown-item rounded-2 text-danger" href="#" id="logoutBtn"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Log out</a></li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+        </nav>
+
+        <!-- Dynamic Category Filter Pills (Bootstrap Nav-Pills) -->
+        <div class="category-pills-bar px-3 px-md-4 py-2">
+          <ul class="nav nav-pills gap-2 flex-nowrap overflow-x-auto custom-scrollbar-x pb-1" id="genrePillsNav" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active rounded-pill px-3 py-1 fs-7" data-filter="all">All</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link rounded-pill px-3 py-1 fs-7" data-filter="pop">Pop</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link rounded-pill px-3 py-1 fs-7" data-filter="rock">Rock</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link rounded-pill px-3 py-1 fs-7" data-filter="hiphop">Hip-Hop</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link rounded-pill px-3 py-1 fs-7" data-filter="lofi">Lo-Fi & Chill</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link rounded-pill px-3 py-1 fs-7" data-filter="electronic">Electronic</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link rounded-pill px-3 py-1 fs-7" data-filter="podcast">Podcasts</button>
+            </li>
+          </ul>
+        </div>
+      </header>
+
+      <!-- Main Scrollable Body Content -->
+      <main class="main-body px-3 px-md-4 py-3" id="home">
+
+        <!-- ==============================================
+             HERO BANNER / CAROUSEL (Bootstrap Carousel Component)
+             ============================================== -->
+        <section class="hero-carousel-section mb-4">
+          <div id="featuredHeroCarousel" class="carousel slide carousel-fade rounded-4 overflow-hidden shadow-lg" data-bs-ride="carousel">
+            <!-- Carousel Indicators -->
+            <div class="carousel-indicators mb-2">
+              <button type="button" data-bs-target="#featuredHeroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+              <button type="button" data-bs-target="#featuredHeroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+              <button type="button" data-bs-target="#featuredHeroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+
+            <!-- Carousel Slides -->
+            <div class="carousel-inner">
+              
+              <!-- Slide 1: Featured Album -->
+              <div class="carousel-item active" data-bs-interval="6000">
+                <div class="hero-slide-content p-4 p-md-5 d-flex flex-column justify-content-end position-relative" style="background: linear-gradient(135deg, rgba(80, 56, 160, 0.9), rgba(18, 18, 18, 0.95)), url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1200&auto=format&fit=crop&q=80') center/cover;">
+                  <span class="badge bg-warning text-dark text-uppercase fw-bold px-3 py-2 rounded-pill mb-2 align-self-start">
+                    <i class="fa-solid fa-sparkles me-1"></i> Featured Spotlight
+                  </span>
+                  <h1 class="display-5 fw-extrabold text-white mb-2">Midnight Echoes</h1>
+                  <p class="lead text-light text-opacity-75 col-lg-8 mb-4">Experience the critically acclaimed new album featuring transcendent synth-wave melodies, ambient soundscapes, and hypnotic beats.</p>
+                  <div class="d-flex flex-wrap gap-3">
+                    <button class="btn btn-success btn-lg rounded-pill px-4 fw-bold d-flex align-items-center gap-2 hero-play-btn" data-song-id="1">
+                      <i class="fa-solid fa-play"></i> Play Album
+                    </button>
+                    <button class="btn btn-outline-light btn-lg rounded-pill px-4 fw-semibold" data-bs-toggle="modal" data-bs-target="#lyricsModal" id="viewLyricsBtn">
+                      <i class="fa-solid fa-align-left me-2"></i> View Lyrics & Details
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 2: Discover Weekly -->
+              <div class="carousel-item" data-bs-interval="6000">
+                <div class="hero-slide-content p-4 p-md-5 d-flex flex-column justify-content-end position-relative" style="background: linear-gradient(135deg, rgba(30, 90, 70, 0.9), rgba(18, 18, 18, 0.95)), url('https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1200&auto=format&fit=crop&q=80') center/cover;">
+                  <span class="badge bg-success text-white text-uppercase fw-bold px-3 py-2 rounded-pill mb-2 align-self-start">
+                    <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Personalized For You
+                  </span>
+                  <h1 class="display-5 fw-extrabold text-white mb-2">Discover Weekly Mix</h1>
+                  <p class="lead text-light text-opacity-75 col-lg-8 mb-4">Your weekly mixtape of fresh music. Updated every Monday with 30 tailored recommendations based on your listening habits.</p>
+                  <div class="d-flex flex-wrap gap-3">
+                    <button class="btn btn-success btn-lg rounded-pill px-4 fw-bold d-flex align-items-center gap-2 hero-play-btn" data-song-id="4">
+                      <i class="fa-solid fa-play"></i> Stream Mix
+                    </button>
+                    <button class="btn btn-dark-glass btn-lg rounded-pill px-4 fw-semibold text-white border-light" data-bs-toggle="modal" data-bs-target="#createPlaylistModal">
+                      <i class="fa-regular fa-bookmark me-2"></i> Save to Library
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 3: Exclusive Podcasts -->
+              <div class="carousel-item" data-bs-interval="6000">
+                <div class="hero-slide-content p-4 p-md-5 d-flex flex-column justify-content-end position-relative" style="background: linear-gradient(135deg, rgba(160, 40, 60, 0.9), rgba(18, 18, 18, 0.95)), url('https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=1200&auto=format&fit=crop&q=80') center/cover;">
+                  <span class="badge bg-danger text-white text-uppercase fw-bold px-3 py-2 rounded-pill mb-2 align-self-start">
+                    <i class="fa-solid fa-microphone me-1"></i> Original Podcast
+                  </span>
+                  <h1 class="display-5 fw-extrabold text-white mb-2">Future of AI & Tech</h1>
+                  <p class="lead text-light text-opacity-75 col-lg-8 mb-4">Deep dives into artificial intelligence, web development frameworks, and future tech frontiers with industry visionaries.</p>
+                  <div class="d-flex flex-wrap gap-3">
+                    <button class="btn btn-light btn-lg rounded-pill px-4 fw-bold d-flex align-items-center gap-2 hero-play-btn" data-song-id="8">
+                      <i class="fa-solid fa-headphones"></i> Listen Episode
+                    </button>
+                    <button class="btn btn-outline-light btn-lg rounded-pill px-4 fw-semibold" data-bs-toggle="modal" data-bs-target="#premiumModal">
+                      <i class="fa-solid fa-circle-info me-2"></i> Learn More
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Carousel Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#featuredHeroCarousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon rounded-circle p-3 bg-dark bg-opacity-50" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#featuredHeroCarousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon rounded-circle p-3 bg-dark bg-opacity-50" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             QUICK JUMP / RECENT SHORTCUTS (Bootstrap Grid)
+             ============================================== -->
+        <section class="quick-mix-section mb-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="fw-bold fs-4 m-0 text-white">Good afternoon</h3>
+            <span class="text-secondary fs-7">Jump right back in</span>
+          </div>
+          
+          <div class="row g-3" id="quickShortcutsRow">
+            <!-- Rendered by JS or static with responsive grid col-12 col-md-6 col-xl-4 -->
+            <div class="col-12 col-sm-6 col-xl-4">
+              <div class="quick-card d-flex align-items-center rounded-3 overflow-hidden" data-song-id="1">
+                <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=160&auto=format&fit=crop&q=80" alt="Album Art" class="quick-card-img">
+                <div class="quick-card-title px-3 fw-bold flex-grow-1 text-truncate">Midnight Echoes</div>
+                <button class="btn btn-success btn-circle quick-play-btn me-3 shadow" title="Play">
+                  <i class="fa-solid fa-play"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-xl-4">
+              <div class="quick-card d-flex align-items-center rounded-3 overflow-hidden" data-song-id="2">
+                <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=160&auto=format&fit=crop&q=80" alt="Album Art" class="quick-card-img">
+                <div class="quick-card-title px-3 fw-bold flex-grow-1 text-truncate">Neon Horizon (Synthwave)</div>
+                <button class="btn btn-success btn-circle quick-play-btn me-3 shadow" title="Play">
+                  <i class="fa-solid fa-play"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-xl-4">
+              <div class="quick-card d-flex align-items-center rounded-3 overflow-hidden" data-song-id="3">
+                <img src="https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=160&auto=format&fit=crop&q=80" alt="Album Art" class="quick-card-img">
+                <div class="quick-card-title px-3 fw-bold flex-grow-1 text-truncate">Lo-Fi Study Beats</div>
+                <button class="btn btn-success btn-circle quick-play-btn me-3 shadow" title="Play">
+                  <i class="fa-solid fa-play"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-xl-4">
+              <div class="quick-card d-flex align-items-center rounded-3 overflow-hidden" data-song-id="4">
+                <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=160&auto=format&fit=crop&q=80" alt="Album Art" class="quick-card-img">
+                <div class="quick-card-title px-3 fw-bold flex-grow-1 text-truncate">Pop Superstars 2026</div>
+                <button class="btn btn-success btn-circle quick-play-btn me-3 shadow" title="Play">
+                  <i class="fa-solid fa-play"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-xl-4">
+              <div class="quick-card d-flex align-items-center rounded-3 overflow-hidden" data-song-id="5">
+                <img src="https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=160&auto=format&fit=crop&q=80" alt="Album Art" class="quick-card-img">
+                <div class="quick-card-title px-3 fw-bold flex-grow-1 text-truncate">Rock Anthems Vault</div>
+                <button class="btn btn-success btn-circle quick-play-btn me-3 shadow" title="Play">
+                  <i class="fa-solid fa-play"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-xl-4">
+              <div class="quick-card d-flex align-items-center rounded-3 overflow-hidden" data-song-id="6">
+                <img src="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=160&auto=format&fit=crop&q=80" alt="Album Art" class="quick-card-img">
+                <div class="quick-card-title px-3 fw-bold flex-grow-1 text-truncate">Electronic Club Sessions</div>
+                <button class="btn btn-success btn-circle quick-play-btn me-3 shadow" title="Play">
+                  <i class="fa-solid fa-play"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SECTION 1: TRENDING SONGS & PLAYLISTS (Bootstrap Grid + Cards)
+             ============================================== -->
+        <section class="music-section mb-5" id="featuredSection">
+          <div class="d-flex justify-content-between align-items-end mb-3">
+            <div>
+              <h4 class="fw-bold text-white mb-1">Featured Music & Trending Hits</h4>
+              <p class="text-secondary fs-7 m-0">The hottest tracks across the globe right now</p>
+            </div>
+            <a href="#" class="text-secondary text-decoration-none fs-7 fw-bold hover-text-white" id="seeAllMusicBtn">Show all</a>
+          </div>
+
+          <!-- Songs Grid -->
+          <div class="row g-3 g-md-4" id="songGridContainer">
+            <!-- Dynamic Cards injected via JavaScript -->
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SECTION 2: POPULAR ARTISTS
+             ============================================== -->
+        <section class="artists-section mb-5">
+          <div class="d-flex justify-content-between align-items-end mb-3">
+            <div>
+              <h4 class="fw-bold text-white mb-1">Popular Artists</h4>
+              <p class="text-secondary fs-7 m-0">Top trending creators worldwide</p>
+            </div>
+          </div>
+
+          <div class="row g-3 g-md-4" id="artistsContainer">
+            <!-- Artist 1 -->
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+              <div class="artist-card text-center p-3 rounded-4 h-100">
+                <div class="artist-img-wrapper position-relative mx-auto mb-3">
+                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80" alt="Aria Vance" class="artist-img rounded-circle img-fluid shadow">
+                  <button class="btn btn-success btn-circle artist-play-btn shadow position-absolute" data-song-id="1">
+                    <i class="fa-solid fa-play"></i>
+                  </button>
+                </div>
+                <h6 class="text-white fw-bold text-truncate mb-1">Aria Vance</h6>
+                <p class="text-secondary fs-8 mb-2">Artist • 42.5M Monthly</p>
+                <button class="btn btn-sm btn-outline-light rounded-pill px-3 follow-artist-btn" data-artist="Aria Vance">Follow</button>
+              </div>
+            </div>
+
+            <!-- Artist 2 -->
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+              <div class="artist-card text-center p-3 rounded-4 h-100">
+                <div class="artist-img-wrapper position-relative mx-auto mb-3">
+                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80" alt="Marcus Cole" class="artist-img rounded-circle img-fluid shadow">
+                  <button class="btn btn-success btn-circle artist-play-btn shadow position-absolute" data-song-id="2">
+                    <i class="fa-solid fa-play"></i>
+                  </button>
+                </div>
+                <h6 class="text-white fw-bold text-truncate mb-1">Marcus Cole</h6>
+                <p class="text-secondary fs-8 mb-2">Artist • 38.1M Monthly</p>
+                <button class="btn btn-sm btn-outline-light rounded-pill px-3 follow-artist-btn" data-artist="Marcus Cole">Follow</button>
+              </div>
+            </div>
+
+            <!-- Artist 3 -->
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+              <div class="artist-card text-center p-3 rounded-4 h-100">
+                <div class="artist-img-wrapper position-relative mx-auto mb-3">
+                  <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&auto=format&fit=crop&q=80" alt="Luna Ray" class="artist-img rounded-circle img-fluid shadow">
+                  <button class="btn btn-success btn-circle artist-play-btn shadow position-absolute" data-song-id="3">
+                    <i class="fa-solid fa-play"></i>
+                  </button>
+                </div>
+                <h6 class="text-white fw-bold text-truncate mb-1">Luna Ray</h6>
+                <p class="text-secondary fs-8 mb-2">Artist • 29.4M Monthly</p>
+                <button class="btn btn-sm btn-outline-light rounded-pill px-3 follow-artist-btn" data-artist="Luna Ray">Follow</button>
+              </div>
+            </div>
+
+            <!-- Artist 4 -->
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+              <div class="artist-card text-center p-3 rounded-4 h-100">
+                <div class="artist-img-wrapper position-relative mx-auto mb-3">
+                  <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&auto=format&fit=crop&q=80" alt="The Synths" class="artist-img rounded-circle img-fluid shadow">
+                  <button class="btn btn-success btn-circle artist-play-btn shadow position-absolute" data-song-id="6">
+                    <i class="fa-solid fa-play"></i>
+                  </button>
+                </div>
+                <h6 class="text-white fw-bold text-truncate mb-1">The Synths</h6>
+                <p class="text-secondary fs-8 mb-2">Band • 18.7M Monthly</p>
+                <button class="btn btn-sm btn-outline-light rounded-pill px-3 follow-artist-btn" data-artist="The Synths">Follow</button>
+              </div>
+            </div>
+
+            <!-- Artist 5 -->
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+              <div class="artist-card text-center p-3 rounded-4 h-100">
+                <div class="artist-img-wrapper position-relative mx-auto mb-3">
+                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&auto=format&fit=crop&q=80" alt="Elena Rostova" class="artist-img rounded-circle img-fluid shadow">
+                  <button class="btn btn-success btn-circle artist-play-btn shadow position-absolute" data-song-id="5">
+                    <i class="fa-solid fa-play"></i>
+                  </button>
+                </div>
+                <h6 class="text-white fw-bold text-truncate mb-1">Elena Rostova</h6>
+                <p class="text-secondary fs-8 mb-2">Artist • 24.2M Monthly</p>
+                <button class="btn btn-sm btn-outline-light rounded-pill px-3 follow-artist-btn" data-artist="Elena Rostova">Follow</button>
+              </div>
+            </div>
+
+            <!-- Artist 6 -->
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+              <div class="artist-card text-center p-3 rounded-4 h-100">
+                <div class="artist-img-wrapper position-relative mx-auto mb-3">
+                  <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=300&auto=format&fit=crop&q=80" alt="Cyber Pulse" class="artist-img rounded-circle img-fluid shadow">
+                  <button class="btn btn-success btn-circle artist-play-btn shadow position-absolute" data-song-id="7">
+                    <i class="fa-solid fa-play"></i>
+                  </button>
+                </div>
+                <h6 class="text-white fw-bold text-truncate mb-1">Cyber Pulse</h6>
+                <p class="text-secondary fs-8 mb-2">Producer • 15.6M Monthly</p>
+                <button class="btn btn-sm btn-outline-light rounded-pill px-3 follow-artist-btn" data-artist="Cyber Pulse">Follow</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SECTION 3: LIVE AUDIO VISUALIZER & DYNAMIC LYRICS
+             ============================================== -->
+        <section class="interactive-experience-section mb-5 p-4 rounded-4 bg-dark-glass border border-secondary border-opacity-25 shadow">
+          <div class="row align-items-center g-4">
+            <div class="col-lg-6">
+              <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 px-3 py-1 rounded-pill mb-2">
+                <i class="fa-solid fa-wave-square me-1"></i> Interactive Visualizer
+              </span>
+              <h3 class="fw-bold text-white mb-2">Real-Time Sound Visualizer</h3>
+              <p class="text-secondary mb-4">Feel the rhythm with dynamic audio wave animation responsive to currently playing tracks. Toggle beat styles, spectrum density, and visual aesthetics.</p>
+              
+              <div class="d-flex flex-wrap gap-2 mb-3">
+                <button class="btn btn-sm btn-outline-success active rounded-pill px-3" id="visualizerStyleBars">Equalizer Bars</button>
+                <button class="btn btn-sm btn-outline-success rounded-pill px-3" id="visualizerStyleWaves">Wave Form</button>
+                <button class="btn btn-sm btn-outline-success rounded-pill px-3" id="visualizerStyleParticles">Neon Pulse</button>
+              </div>
+
+              <!-- Visualizer Canvas -->
+              <div class="canvas-container rounded-3 overflow-hidden bg-black p-2 border border-dark">
+                <canvas id="audioVisualizerCanvas" width="500" height="150" class="w-100"></canvas>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="lyrics-preview-box p-4 rounded-3 bg-black bg-opacity-50 border border-secondary border-opacity-25 h-100 d-flex flex-column">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <div class="d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-music text-success"></i>
+                    <span class="fw-bold text-white" id="nowPlayingLyricsTitle">Midnight Echoes - Aria Vance</span>
+                  </div>
+                  <span class="badge bg-dark-subtle text-light rounded-pill">Live Lyrics</span>
+                </div>
+
+                <div class="lyrics-scroll-box flex-grow-1 py-2 custom-scrollbar overflow-y-auto" id="liveLyricsContainer" style="max-height: 180px;">
+                  <p class="lyrics-line active-line mb-2">♪ [Intro Synth Melodies building up] ♪</p>
+                  <p class="lyrics-line mb-2">Walking through the neon lights in the midnight air</p>
+                  <p class="lyrics-line mb-2">Echoes in the valley, running without a care</p>
+                  <p class="lyrics-line mb-2">Feel the rhythm take control of the beating heart</p>
+                  <p class="lyrics-line mb-2">We are infinite, nothing can tear us apart</p>
+                  <p class="lyrics-line mb-2">♪ [Bass Drop & Harmonized Chorus] ♪</p>
+                </div>
+
+                <div class="mt-3 pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
+                  <small class="text-secondary"><i class="fa-solid fa-microphone-lines me-1"></i> Synced by Spotify Musixmatch</small>
+                  <button class="btn btn-sm btn-outline-light rounded-pill" data-bs-toggle="modal" data-bs-target="#lyricsModal">Expand Full Screen</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SECTION 4: SPOTIFY SERVICES & PREMIUM PRICING (Bootstrap Cards)
+             ============================================== -->
+        <section class="pricing-section mb-5" id="plansSection">
+          <div class="text-center mb-4">
+            <span class="badge bg-warning text-dark text-uppercase fw-bold px-3 py-1 rounded-pill mb-2">Premium Experience</span>
+            <h3 class="display-6 fw-extrabold text-white mb-2">Choose Your Spotify Plan</h3>
+            <p class="text-secondary col-md-8 mx-auto">Listen without limits. Ad-free music, offline downloads, high-fidelity sound, and unlimited skips.</p>
+          </div>
+
+          <div class="row g-4 align-items-stretch justify-content-center">
+            
+            <!-- Plan 1: Free -->
+            <div class="col-12 col-md-6 col-lg-3">
+              <div class="pricing-card h-100 p-4 rounded-4 d-flex flex-column bg-dark-glass border border-secondary border-opacity-25">
+                <div class="mb-3">
+                  <span class="badge bg-secondary rounded-pill px-3 py-1 mb-2">Free</span>
+                  <h4 class="fw-bold text-white mb-1">Spotify Free</h4>
+                  <div class="display-6 fw-bold text-white mb-0">$0<span class="fs-6 text-secondary fw-normal"> / month</span></div>
+                </div>
+                <hr class="border-secondary opacity-25">
+                <ul class="list-unstyled flex-grow-1 d-flex flex-column gap-2 mb-4 text-light text-opacity-75 fs-7">
+                  <li><i class="fa-solid fa-check text-success me-2"></i> Over 100 million songs</li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> Curated podcasts & audiobooks</li>
+                  <li><i class="fa-solid fa-xmark text-danger me-2"></i> Ad-free music listening</li>
+                  <li><i class="fa-solid fa-xmark text-danger me-2"></i> Offline song downloads</li>
+                  <li><i class="fa-solid fa-xmark text-danger me-2"></i> Ultra-High 320kbps Audio</li>
+                </ul>
+                <button class="btn btn-outline-light rounded-pill fw-bold w-100 py-2" disabled>Current Active Plan</button>
+              </div>
+            </div>
+
+            <!-- Plan 2: Individual (Featured) -->
+            <div class="col-12 col-md-6 col-lg-3">
+              <div class="pricing-card featured-plan h-100 p-4 rounded-4 d-flex flex-column bg-dark-glass border-2 border-success position-relative shadow-lg">
+                <span class="position-absolute top-0 start-50 translate-middle badge bg-success text-white px-3 py-1 rounded-pill fw-bold text-uppercase fs-8">
+                  Most Popular
+                </span>
+                <div class="mb-3">
+                  <span class="badge bg-success bg-opacity-25 text-success rounded-pill px-3 py-1 mb-2">Individual</span>
+                  <h4 class="fw-bold text-white mb-1">Premium Individual</h4>
+                  <div class="display-6 fw-bold text-white mb-0">$10.99<span class="fs-6 text-secondary fw-normal"> / month</span></div>
+                  <small class="text-success fw-semibold">1 month free trial</small>
+                </div>
+                <hr class="border-secondary opacity-25">
+                <ul class="list-unstyled flex-grow-1 d-flex flex-column gap-2 mb-4 text-light text-opacity-90 fs-7">
+                  <li><i class="fa-solid fa-check text-success me-2"></i> 1 Premium account</li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> Completely ad-free listening</li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> Download to listen offline</li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> Unlimited skips & play any track</li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> High Fidelity Audio Quality</li>
+                </ul>
+                <button class="btn btn-success rounded-pill fw-bold w-100 py-2 select-plan-btn hover-scale" data-plan="Premium Individual" data-price="$10.99/mo">
+                  Get Premium Individual
+                </button>
+              </div>
+            </div>
+
+            <!-- Plan 3: Duo -->
+            <div class="col-12 col-md-6 col-lg-3">
+              <div class="pricing-card h-100 p-4 rounded-4 d-flex flex-column bg-dark-glass border border-secondary border-opacity-25">
+                <div class="mb-3">
+                  <span class="badge bg-info bg-opacity-25 text-info rounded-pill px-3 py-1 mb-2">Duo</span>
+                  <h4 class="fw-bold text-white mb-1">Premium Duo</h4>
+                  <div class="display-6 fw-bold text-white mb-0">$14.99<span class="fs-6 text-secondary fw-normal"> / month</span></div>
+                  <small class="text-secondary">2 accounts under one roof</small>
+                </div>
+                <hr class="border-secondary opacity-25">
+                <ul class="list-unstyled flex-grow-1 d-flex flex-column gap-2 mb-4 text-light text-opacity-75 fs-7">
+                  <li><i class="fa-solid fa-check text-success me-2"></i> 2 Premium accounts</li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> Shared Duo Mix playlist</li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> Ad-free music listening</li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> Offline song downloads</li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> High Fidelity 320kbps</li>
+                </ul>
+                <button class="btn btn-outline-light rounded-pill fw-bold w-100 py-2 select-plan-btn" data-plan="Premium Duo" data-price="$14.99/mo">
+                  Get Premium Duo
+                </button>
+              </div>
+            </div>
+
+            <!-- Plan 4: Student -->
+            <div class="col-12 col-md-6 col-lg-3">
+              <div class="pricing-card h-100 p-4 rounded-4 d-flex flex-column bg-dark-glass border border-secondary border-opacity-25">
+                <div class="mb-3">
+                  <span class="badge bg-warning bg-opacity-25 text-warning rounded-pill px-3 py-1 mb-2">Student</span>
+                  <h4 class="fw-bold text-white mb-1">Premium Student</h4>
+                  <div class="display-6 fw-bold text-white mb-0">$5.99<span class="fs-6 text-secondary fw-normal"> / month</span></div>
+                  <small class="text-warning fw-semibold">50% discount for college students</small>
+                </div>
+                <hr class="border-secondary opacity-25">
+                <ul class="list-unstyled flex-grow-1 d-flex flex-column gap-2 mb-4 text-light text-opacity-75 fs-7">
+                  <li><i class="fa-solid fa-check text-success me-2"></i> 1 verified student account</li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> Free Hulu subscription included</li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> Ad-free music listening</li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> Offline downloads</li>
+                  <li><i class="fa-solid fa-check text-success me-2"></i> Cancel anytime</li>
+                </ul>
+                <button class="btn btn-outline-light rounded-pill fw-bold w-100 py-2 select-plan-btn" data-plan="Premium Student" data-price="$5.99/mo">
+                  Get Student Discount
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SECTION 5: FREQUENTLY ASKED QUESTIONS (Bootstrap Accordion Component)
+             ============================================== -->
+        <section class="faq-section mb-5" id="faqSection">
+          <div class="text-center mb-4">
+            <span class="badge bg-dark-subtle text-secondary text-uppercase fw-bold px-3 py-1 rounded-pill mb-2">Got Questions?</span>
+            <h3 class="fw-bold text-white mb-2">Frequently Asked Questions</h3>
+            <p class="text-secondary col-md-6 mx-auto">Everything you need to know about Spotify Web Player features, audio quality, and subscriptions.</p>
+          </div>
+
+          <div class="col-lg-9 mx-auto">
+            <div class="accordion accordion-flush custom-accordion rounded-4 overflow-hidden" id="spotifyFaqAccordion">
+              
+              <!-- FAQ Item 1 -->
+              <div class="accordion-item bg-dark-glass border-bottom border-secondary border-opacity-25">
+                <h2 class="accordion-header" id="faqHeadingOne">
+                  <button class="accordion-button collapsed bg-transparent text-white fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseOne" aria-expanded="false" aria-controls="faqCollapseOne">
+                    <i class="fa-solid fa-circle-question text-success me-3"></i>
+                    How does the Spotify Web Player work?
+                  </button>
+                </h2>
+                <div id="faqCollapseOne" class="accordion-collapse collapse" aria-labelledby="faqHeadingOne" data-bs-parent="#spotifyFaqAccordion">
+                  <div class="accordion-body text-light text-opacity-75 pt-0">
+                    The Spotify Web Player allows you to stream your favorite music, albums, playlists, and podcasts directly in any modern web browser without needing to download desktop software. It features instant song search, lyrics display, visualizer, and custom playlist curation.
+                  </div>
+                </div>
+              </div>
+
+              <!-- FAQ Item 2 -->
+              <div class="accordion-item bg-dark-glass border-bottom border-secondary border-opacity-25">
+                <h2 class="accordion-header" id="faqHeadingTwo">
+                  <button class="accordion-button collapsed bg-transparent text-white fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseTwo" aria-expanded="false" aria-controls="faqCollapseTwo">
+                    <i class="fa-solid fa-music text-success me-3"></i>
+                    Can I create and manage my custom playlists?
+                  </button>
+                </h2>
+                <div id="faqCollapseTwo" class="accordion-collapse collapse" aria-labelledby="faqHeadingTwo" data-bs-parent="#spotifyFaqAccordion">
+                  <div class="accordion-body text-light text-opacity-75 pt-0">
+                    Yes! Click the <strong>Create Playlist</strong> button on the sidebar. You can name your playlist, add a custom description, add tracks with one click, and like tracks to build your personalized Liked Songs library.
+                  </div>
+                </div>
+              </div>
+
+              <!-- FAQ Item 3 -->
+              <div class="accordion-item bg-dark-glass border-bottom border-secondary border-opacity-25">
+                <h2 class="accordion-header" id="faqHeadingThree">
+                  <button class="accordion-button collapsed bg-transparent text-white fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseThree" aria-expanded="false" aria-controls="faqCollapseThree">
+                    <i class="fa-solid fa-crown text-warning me-3"></i>
+                    What are the benefits of Spotify Premium?
+                  </button>
+                </h2>
+                <div id="faqCollapseThree" class="accordion-collapse collapse" aria-labelledby="faqHeadingThree" data-bs-parent="#spotifyFaqAccordion">
+                  <div class="accordion-body text-light text-opacity-75 pt-0">
+                    Spotify Premium unlocks ad-free listening, offline download support, unlimited song skips, maximum 320kbps high-fidelity streaming quality, and Spotify Connect integration across all your smart speakers and consoles.
+                  </div>
+                </div>
+              </div>
+
+              <!-- FAQ Item 4 -->
+              <div class="accordion-item bg-dark-glass border-bottom border-secondary border-opacity-25">
+                <h2 class="accordion-header" id="faqHeadingFour">
+                  <button class="accordion-button collapsed bg-transparent text-white fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseFour" aria-expanded="false" aria-controls="faqCollapseFour">
+                    <i class="fa-solid fa-graduation-cap text-info me-3"></i>
+                    How do I qualify for the Spotify Student discount?
+                  </button>
+                </h2>
+                <div id="faqCollapseFour" class="accordion-collapse collapse" aria-labelledby="faqHeadingFour" data-bs-parent="#spotifyFaqAccordion">
+                  <div class="accordion-body text-light text-opacity-75 pt-0">
+                    Students enrolled at accredited colleges or universities can get 50% off Premium Individual plus free Hulu access. Verification is fast and automatic using SheerID with your student email or college portal credentials.
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- ==============================================
+           3. FOOTER SECTION (Responsive Columns & Newsletter)
+           ============================================== -->
+      <footer class="spotify-footer px-3 px-md-5 pt-5 pb-4 mt-auto">
+        <div class="container-fluid p-0">
+          
+          <!-- Top Row: Links & Newsletter -->
+          <div class="row g-4 mb-5">
+            <!-- Brand Info -->
+            <div class="col-12 col-md-4 col-lg-3">
+              <div class="d-flex align-items-center gap-2 mb-3">
+                <i class="fa-brands fa-spotify spotify-brand-icon fs-2"></i>
+                <span class="brand-text fs-4">Spotify</span>
+              </div>
+              <p class="text-secondary fs-7 mb-3">Music for every moment. Play millions of songs and podcasts on your device with pristine audio fidelity.</p>
+              
+              <!-- Social Media Icons with Hover Effects -->
+              <div class="d-flex gap-2 social-icons-group">
+                <a href="https://instagram.com" target="_blank" class="social-icon-btn rounded-circle" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://twitter.com" target="_blank" class="social-icon-btn rounded-circle" title="Twitter / X"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="https://facebook.com" target="_blank" class="social-icon-btn rounded-circle" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://github.com" target="_blank" class="social-icon-btn rounded-circle" title="GitHub"><i class="fa-brands fa-github"></i></a>
+              </div>
+            </div>
+
+            <!-- Column 1: Company -->
+            <div class="col-6 col-md-2 col-lg-2">
+              <h6 class="text-uppercase fw-bold text-white fs-7 mb-3">Company</h6>
+              <ul class="list-unstyled d-flex flex-column gap-2 fs-7 footer-links">
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Jobs & Careers</a></li>
+                <li><a href="#">For the Record</a></li>
+                <li><a href="#">Press Room</a></li>
+              </ul>
+            </div>
+
+            <!-- Column 2: Communities -->
+            <div class="col-6 col-md-2 col-lg-2">
+              <h6 class="text-uppercase fw-bold text-white fs-7 mb-3">Communities</h6>
+              <ul class="list-unstyled d-flex flex-column gap-2 fs-7 footer-links">
+                <li><a href="#">For Artists</a></li>
+                <li><a href="#">Developers</a></li>
+                <li><a href="#">Advertising</a></li>
+                <li><a href="#">Investors</a></li>
+                <li><a href="#">Vendors</a></li>
+              </ul>
+            </div>
+
+            <!-- Column 3: Useful Links -->
+            <div class="col-6 col-md-2 col-lg-2">
+              <h6 class="text-uppercase fw-bold text-white fs-7 mb-3">Useful Links</h6>
+              <ul class="list-unstyled d-flex flex-column gap-2 fs-7 footer-links">
+                <li><a href="#faqSection">Support</a></li>
+                <li><a href="#home">Web Player</a></li>
+                <li><a href="#">Free Mobile App</a></li>
+                <li><a href="#plansSection">Premium Plans</a></li>
+              </ul>
+            </div>
+
+            <!-- Column 4: Newsletter Subscription -->
+            <div class="col-12 col-md-6 col-lg-3">
+              <h6 class="text-uppercase fw-bold text-white fs-7 mb-3">Stay Updated</h6>
+              <p class="text-secondary fs-7 mb-2">Subscribe to our music digest for new album alerts & curated playlists.</p>
+              <form id="newsletterForm" class="d-flex flex-column gap-2">
+                <div class="input-group">
+                  <input type="email" class="form-control bg-dark text-white border-secondary fs-7" placeholder="Enter your email" id="newsletterEmail" required>
+                  <button class="btn btn-success px-3 fs-7 fw-bold" type="submit">Join</button>
+                </div>
+                <small class="text-secondary fs-8">We respect your privacy. Unsubscribe anytime.</small>
+              </form>
+            </div>
+          </div>
+
+          <hr class="border-secondary opacity-25 mb-4">
+
+          <!-- Bottom Row: Legal & Copyright -->
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 fs-8 text-secondary">
+            <div class="d-flex flex-wrap gap-3">
+              <a href="#" class="text-secondary text-decoration-none hover-text-white">Legal</a>
+              <a href="#" class="text-secondary text-decoration-none hover-text-white">Privacy Center</a>
+              <a href="#" class="text-secondary text-decoration-none hover-text-white">Privacy Policy</a>
+              <a href="#" class="text-secondary text-decoration-none hover-text-white">Cookies</a>
+              <a href="#" class="text-secondary text-decoration-none hover-text-white">About Ads</a>
+              <a href="#" class="text-secondary text-decoration-none hover-text-white">Accessibility</a>
+            </div>
+            <div>
+              <span>© 2026 Spotify AB. Developed as a Responsive Single Page Application.</span>
+            </div>
+          </div>
+
+        </div>
+      </footer>
+
+    </div><!-- /main-wrapper -->
+
+  </div><!-- /app-layout -->
+
+  <!-- ==============================================
+       4. PERSISTENT FIXED BOTTOM AUDIO PLAYER BAR
+       ============================================== -->
+  <div class="fixed-bottom-player bg-dark-glass border-top border-secondary border-opacity-25 px-3 px-md-4 py-2" id="bottomPlayerBar">
+    <div class="container-fluid p-0">
+      <div class="row align-items-center justify-content-between">
+        
+        <!-- Left: Now Playing Track Info -->
+        <div class="col-4 col-md-3 d-flex align-items-center gap-3">
+          <div class="now-playing-thumb position-relative rounded-2 overflow-hidden flex-shrink-0">
+            <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=120&auto=format&fit=crop&q=80" alt="Current Song Art" id="playerThumb" class="img-fluid">
+          </div>
+          <div class="d-flex flex-column text-truncate">
+            <span class="fw-bold text-white fs-7 text-truncate hover-underline cursor-pointer" id="playerTitle" data-bs-toggle="modal" data-bs-target="#lyricsModal">Midnight Echoes</span>
+            <span class="text-secondary fs-8 text-truncate hover-underline cursor-pointer" id="playerArtist">Aria Vance</span>
+          </div>
+          <button class="btn btn-icon text-secondary heart-btn ms-1 ms-md-2" id="playerLikeBtn" title="Save to Your Library">
+            <i class="fa-regular fa-heart"></i>
+          </button>
+        </div>
+
+        <!-- Center: Playback Controls & Progress Bar -->
+        <div class="col-8 col-md-6 d-flex flex-column align-items-center">
+          
+          <!-- Control Buttons -->
+          <div class="d-flex align-items-center gap-3 mb-1">
+            <button class="btn btn-icon text-secondary hover-text-white fs-7" id="shuffleBtn" title="Enable Shuffle">
+              <i class="fa-solid fa-shuffle"></i>
+            </button>
+            <button class="btn btn-icon text-secondary hover-text-white fs-6" id="prevBtn" title="Previous Track">
+              <i class="fa-solid fa-backward-step"></i>
+            </button>
+            <button class="btn btn-circle btn-white text-dark shadow-sm play-main-btn" id="playPauseBtn" title="Play">
+              <i class="fa-solid fa-play" id="playPauseIcon"></i>
+            </button>
+            <button class="btn btn-icon text-secondary hover-text-white fs-6" id="nextBtn" title="Next Track">
+              <i class="fa-solid fa-forward-step"></i>
+            </button>
+            <button class="btn btn-icon text-secondary hover-text-white fs-7" id="repeatBtn" title="Repeat Track">
+              <i class="fa-solid fa-repeat"></i>
+            </button>
+          </div>
+
+          <!-- Scrub Progress Bar & Timestamps -->
+          <div class="d-flex align-items-center w-100 gap-2 px-2">
+            <span class="fs-8 text-secondary font-monospace" id="currentTimeLabel">0:00</span>
+            <div class="progress-bar-container flex-grow-1 position-relative" id="progressContainer">
+              <div class="custom-progress rounded-pill bg-dark-subtle">
+                <div class="custom-progress-filled rounded-pill bg-white" id="progressBar" style="width: 0%;"></div>
+              </div>
+            </div>
+            <span class="fs-8 text-secondary font-monospace" id="durationLabel">3:45</span>
+          </div>
+
+        </div>
+
+        <!-- Right: Extra Controls (Lyrics, Queue, Volume) -->
+        <div class="col-md-3 d-none d-md-flex align-items-center justify-content-end gap-2">
+          <button class="btn btn-icon text-secondary hover-text-white fs-7" data-bs-toggle="modal" data-bs-target="#lyricsModal" title="Lyrics">
+            <i class="fa-solid fa-microphone-lines"></i>
+          </button>
+          <button class="btn btn-icon text-secondary hover-text-white fs-7" data-bs-toggle="offcanvas" data-bs-target="#queueOffcanvas" title="Queue">
+            <i class="fa-solid fa-list-ul"></i>
+          </button>
+          
+          <!-- Volume Controls -->
+          <div class="d-flex align-items-center gap-2 ms-2 volume-container">
+            <button class="btn btn-icon text-secondary hover-text-white fs-7 p-0" id="volumeMuteBtn" title="Mute/Unmute">
+              <i class="fa-solid fa-volume-high" id="volumeIcon"></i>
+            </button>
+            <div class="volume-slider-wrapper">
+              <input type="range" class="form-range custom-range" id="volumeSlider" min="0" max="100" value="80">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================================
+       5. BOOTSTRAP MODALS & OFFCANVAS COMPONENTS
+       ============================================== -->
+
+  <!-- Modal 1: Create Playlist Modal (Bootstrap Modal) -->
+  <div class="modal fade" id="createPlaylistModal" tabindex="-1" aria-labelledby="createPlaylistModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-white border border-secondary border-opacity-50 rounded-4 shadow-lg">
+        <div class="modal-header border-secondary border-opacity-25">
+          <h5 class="modal-title fw-bold" id="createPlaylistModalLabel">
+            <i class="fa-solid fa-plus-circle text-success me-2"></i>Create New Playlist
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="createPlaylistForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="playlistTitleInput" class="form-label fs-7 text-secondary fw-semibold">Playlist Name</label>
+              <input type="text" class="form-control bg-dark-subtle text-white border-secondary" id="playlistTitleInput" placeholder="My Awesome Playlist #1" required>
+            </div>
+            <div class="mb-3">
+              <label for="playlistDescInput" class="form-label fs-7 text-secondary fw-semibold">Description</label>
+              <textarea class="form-control bg-dark-subtle text-white border-secondary" id="playlistDescInput" rows="3" placeholder="Give your playlist a catchy description..."></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fs-7 text-secondary fw-semibold">Playlist Genre Tag</label>
+              <select class="form-select bg-dark-subtle text-white border-secondary" id="playlistGenreSelect">
+                <option value="Pop" selected>Pop & Upbeat</option>
+                <option value="Lo-Fi">Chill & Lo-Fi</option>
+                <option value="Rock">Rock & Metal</option>
+                <option value="Hip-Hop">Hip-Hop & Rap</option>
+                <option value="Electronic">Electronic & EDM</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer border-secondary border-opacity-25">
+            <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Song Details & Fullscreen Lyrics Modal -->
+  <div class="modal fade" id="lyricsModal" tabindex="-1" aria-labelledby="lyricsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content bg-black text-white border border-secondary border-opacity-50 rounded-4 shadow-lg overflow-hidden">
+        <div class="modal-header border-secondary border-opacity-25 bg-dark-glass">
+          <div class="d-flex align-items-center gap-3">
+            <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=100&auto=format&fit=crop&q=80" alt="Cover" class="rounded-3 modal-cover-img" id="modalSongCover" width="50" height="50">
+            <div>
+              <h5 class="modal-title fw-bold m-0" id="modalSongTitle">Midnight Echoes</h5>
+              <small class="text-secondary" id="modalSongArtist">Aria Vance • Synthwave Horizon (2026)</small>
+            </div>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4 p-md-5 text-center custom-scrollbar" style="max-height: 60vh; overflow-y: auto;">
+          <h4 class="fw-bold text-success mb-4"><i class="fa-solid fa-microphone-lines me-2"></i>Synchronized Lyrics</h4>
+          <div class="full-lyrics-container d-flex flex-column gap-3 fs-5" id="fullLyricsContainer">
+            <p class="lyrics-verse">[Intro - Electronic atmospheric synths]</p>
+            <p class="lyrics-verse">Walking through the neon lights in the midnight air</p>
+            <p class="lyrics-verse">Echoes in the valley, running without a care</p>
+            <p class="lyrics-verse fw-bold text-success">Feel the rhythm take control of the beating heart</p>
+            <p class="lyrics-verse fw-bold text-success">We are infinite, nothing can tear us apart</p>
+            <p class="lyrics-verse">[Chorus]</p>
+            <p class="lyrics-verse">Underneath the strobe lights glowing so bright</p>
+            <p class="lyrics-verse">Dancing till tomorrow brings the morning light</p>
+            <p class="lyrics-verse">Midnight echoes calling out your name</p>
+            <p class="lyrics-verse">In this soundwave, we will never be the same</p>
+            <p class="lyrics-verse">[Guitar & Synthesizer Solo]</p>
+            <p class="lyrics-verse">[Outro - Fading harmonies]</p>
+          </div>
+        </div>
+        <div class="modal-footer border-secondary border-opacity-25 bg-dark-glass justify-content-between">
+          <span class="text-secondary fs-7"><i class="fa-solid fa-shield-halved text-success me-1"></i> Verified Spotify Artist Lyrics</span>
+          <button type="button" class="btn btn-outline-light rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Premium Checkout / Subscription Modal -->
+  <div class="modal fade" id="premiumModal" tabindex="-1" aria-labelledby="premiumModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-white border border-warning rounded-4 shadow-lg">
+        <div class="modal-header border-secondary border-opacity-25">
+          <div class="d-flex align-items-center gap-2">
+            <i class="fa-solid fa-crown text-warning fs-4"></i>
+            <h5 class="modal-title fw-bold" id="premiumModalLabel">Upgrade to Spotify Premium</h5>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="text-center mb-4">
+            <span class="badge bg-warning text-dark px-3 py-1 rounded-pill mb-2 fw-bold" id="selectedPlanBadge">Premium Individual</span>
+            <h3 class="fw-extrabold text-white" id="selectedPlanPriceDisplay">$10.99 / month</h3>
+            <p class="text-secondary fs-7">First 30 days free. Cancel anytime before your billing date.</p>
+          </div>
+
+          <div class="payment-methods mb-3">
+            <label class="form-label fs-7 text-secondary fw-semibold">Select Payment Method</label>
+            <div class="d-flex gap-2">
+              <button class="btn btn-outline-light flex-grow-1 active"><i class="fa-brands fa-cc-visa me-1"></i> Card</button>
+              <button class="btn btn-outline-light flex-grow-1"><i class="fa-brands fa-paypal me-1"></i> PayPal</button>
+              <button class="btn btn-outline-light flex-grow-1"><i class="fa-brands fa-google-pay me-1"></i> GPay</button>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fs-7 text-secondary fw-semibold">Card Number</label>
+            <input type="text" class="form-control bg-dark-subtle text-white border-secondary" placeholder="4532 •••• •••• 8890" value="4532 9012 4432 8890">
+          </div>
+
+          <div class="row g-2">
+            <div class="col-6">
+              <label class="form-label fs-7 text-secondary fw-semibold">Expiry Date</label>
+              <input type="text" class="form-control bg-dark-subtle text-white border-secondary" placeholder="MM/YY" value="08/29">
+            </div>
+            <div class="col-6">
+              <label class="form-label fs-7 text-secondary fw-semibold">CVC / CVV</label>
+              <input type="password" class="form-control bg-dark-subtle text-white border-secondary" placeholder="123" value="789">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-secondary border-opacity-25">
+          <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-warning rounded-pill px-4 fw-bold text-dark" id="confirmSubscribeBtn">Start 30-Day Free Trial</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: User Profile & Settings Modal -->
+  <div class="modal fade" id="userProfileModal" tabindex="-1" aria-labelledby="userProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-white border border-secondary border-opacity-50 rounded-4 shadow-lg">
+        <div class="modal-header border-secondary border-opacity-25">
+          <h5 class="modal-title fw-bold" id="userProfileModalLabel">
+            <i class="fa-regular fa-user text-success me-2"></i>Profile & Audio Settings
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="text-center mb-4">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80" alt="Avatar" class="rounded-circle shadow mb-2" width="80" height="80">
+            <h5 class="fw-bold text-white mb-0" id="profileModalName">music_mate</h5>
+            <small class="text-success fw-semibold"><i class="fa-solid fa-circle-check me-1"></i>Spotify Verified Listener</small>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fs-7 text-secondary fw-semibold">Streaming Audio Quality</label>
+            <select class="form-select bg-dark-subtle text-white border-secondary" id="audioQualitySelect">
+              <option value="auto">Automatic (Recommended)</option>
+              <option value="high" selected>High (320 kbps)</option>
+              <option value="lossless">Lossless Hi-Fi (24-bit/96kHz)</option>
+              <option value="low">Data Saver (96 kbps)</option>
+            </select>
+          </div>
+
+          <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" role="switch" id="crossfadeSwitch" checked>
+            <label class="form-check-label fs-7 text-light" for="crossfadeSwitch">Song Crossfade & Gapless Playback</label>
+          </div>
+
+          <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" role="switch" id="normalizeVolumeSwitch" checked>
+            <label class="form-check-label fs-7 text-light" for="normalizeVolumeSwitch">Normalize Volume for all tracks</label>
+          </div>
+        </div>
+        <div class="modal-footer border-secondary border-opacity-25">
+          <button type="button" class="btn btn-success rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Save Preferences</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Offcanvas 2: Playback Queue (Bootstrap Offcanvas Right) -->
+  <div class="offcanvas offcanvas-end bg-dark text-white" tabindex="-1" id="queueOffcanvas" aria-labelledby="queueOffcanvasLabel">
+    <div class="offcanvas-header border-bottom border-secondary border-opacity-25">
+      <div class="d-flex align-items-center gap-2">
+        <i class="fa-solid fa-list-ul text-success fs-5"></i>
+        <h5 class="offcanvas-title fw-bold m-0" id="queueOffcanvasLabel">Play Queue</h5>
+      </div>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column custom-scrollbar">
+      
+      <!-- Now Playing Section -->
+      <div class="mb-4">
+        <h6 class="text-secondary text-uppercase fs-8 fw-bold mb-2 tracking-wider">Now Playing</h6>
+        <div class="d-flex align-items-center gap-3 p-2 rounded-3 bg-dark-glass border border-success border-opacity-50">
+          <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=100&auto=format&fit=crop&q=80" alt="Queue Current" class="rounded-2" id="queueNowPlayingImg" width="45" height="45">
+          <div class="text-truncate flex-grow-1">
+            <div class="fw-bold text-success text-truncate fs-7" id="queueNowPlayingTitle">Midnight Echoes</div>
+            <small class="text-secondary text-truncate" id="queueNowPlayingArtist">Aria Vance</small>
+          </div>
+          <i class="fa-solid fa-volume-high text-success"></i>
+        </div>
+      </div>
+
+      <!-- Next in Queue Section -->
+      <div class="flex-grow-1">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="text-secondary text-uppercase fs-8 fw-bold m-0 tracking-wider">Next In Queue</h6>
+          <button class="btn btn-sm btn-link text-secondary text-decoration-none p-0 fs-8" id="clearQueueBtn">Clear</button>
+        </div>
+        <ul class="list-unstyled d-flex flex-column gap-2" id="queueListContainer">
+          <!-- Queue items rendered by JavaScript -->
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification Container (Bootstrap Toast Component) -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 2000;">
+    <div id="liveToast" class="toast align-items-center text-bg-dark border border-success shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body d-flex align-items-center gap-2">
+          <i class="fa-solid fa-circle-check text-success fs-5" id="toastIcon"></i>
+          <span id="toastMessage" class="fw-semibold fs-7">Added to Your Library!</span>
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5.3.3 JS Bundle (Popper included) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+  <!-- Application Logic JS -->
+  <script src="./script.js"></script>
+</body>
+</html>
