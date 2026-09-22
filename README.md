@@ -55,4 +55,4 @@ npx serve .
 
 ## 👨‍💻 Author
 - **Anvith Shetty**
-- Live Demo: [[https://nupoor-deshpande01.github.io/Spotify_Clone/](https://nupoor-deshpande01.github.io/Spotify_Clone/)](https://spotify-clone-seven-jet.vercel.app/)
+- Live Demo: (https://spotify-clone-seven-jet.vercel.app/)
